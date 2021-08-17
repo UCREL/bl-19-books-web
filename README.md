@@ -8,7 +8,7 @@ The database will be called bl-books.
 
 ``` json
 {
-    "name": "data",
+    "name": "tokens",
     "sets": [
         {
             "name": "tokens",
@@ -74,3 +74,6 @@ docker run --user $(id -u):$(id -g) -v $(pwd)/test_files:/data --entrypoint "jav
 ```
 
 At the moment it would appear read permissions is not enough for LexiDB with regards to database files. On the SSL front for `default.conf` have a look at this for the proxy server: https://docs.nginx.com/nginx/admin-guide/security-controls/securing-tcp-traffic-upstream/
+
+
+Another problem, LexiDB requires a proper TSV library to write tsv files, else encoding issues can occur.

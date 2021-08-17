@@ -33,7 +33,7 @@ function formatNumber(num) {
 function updateHighlighting(column) {
     if (column != coloring) {
         $('.pos-check').toggle();
-        $('.sem-check').toggle();
+        //$('.sem-check').toggle();
     }
     coloring = column;
 }
@@ -618,7 +618,7 @@ function showTooltip(event, token) {
             tooltipspan.appendChild(tooltiptable);
 
             for (var prop in token) {
-                if (prop !== 'speaker' && prop !== 'date' && prop !== 'i' && prop !== 'token' && prop !== 'id' && prop !== 'house' && prop !== '$file') {
+                if (prop !== 'page' && prop !== 'quality' && prop !== 'i' && prop !== 'token' && prop !== 'id' && prop !== '$file' && prop !== 'identifier') {
                     var tr = document.createElement("tr");
                     tooltiptable.appendChild(tr);
 
@@ -642,8 +642,8 @@ function getTokenNode(token) {
     tokenspan.className = "lexitooltip";
     if (coloring == "pos" && token != null && token.pos != null)
         tokenspan.className += " " + token.pos.charAt(0);
-    if (coloring == "sem" && token != null && token.sem != null)
-        tokenspan.className += " " + token.sem.charAt(0);
+    //if (coloring == "sem" && token != null && token.sem != null)
+    //    tokenspan.className += " " + token.sem.charAt(0);
     if (token.hit)
         tokenspan.className += " hit";
 

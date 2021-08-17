@@ -8,7 +8,7 @@
         <meta content="" name="author">
         <link href="/logo.png" rel="icon" type="image/png">
     
-        <title>Hansard Live(lexiDB)</title>
+        <title>British Library Books(lexiDB)</title>
     
         <!--<link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">-->
@@ -47,7 +47,7 @@
         <table width="100%">
             <tr>
                 <td width="120px">
-                    <a class="navbar-brand">Hansard Live</a><br/>
+                    <a class="navbar-brand">British Library Books</a><br/>
                     <a class="light" href="https://github.com/matthewcoole/lexidb" target="_blank">(powered by LexiDB)</a>
                 </td>
                 <td id="paging"></td>
@@ -139,7 +139,7 @@
                             </div>
                             <select class="form-control" id="highlighting" onchange="updateHighlighting(this.value)">
                                 <option value="pos">Part-of-Speech</option>
-                                <option value="sem">Semantic</option>
+                                <!--<option value="sem">Semantic</option>-->
                             </select>
                         </div>
                         <div class="input-group options">
@@ -171,7 +171,7 @@
                                 <select class="form-control sort-column">
                                     <option selected="selected" value="token">token</option>
                                     <option value="pos">pos</option>
-                                    <option value="sem">sem</option>
+                                    <!--<option value="sem">sem</option>-->
                                     <option value="speaker">speaker</option>
                                     <option value="date">date</option>
                                 </select>
@@ -218,7 +218,7 @@
                             <select class="form-control" id="groupby">
                                 <option selected="selected" value="token">token</option>
                                 <option value="pos">pos</option>
-                                <option value="sem">sem</option>
+                                <!--<option value="sem">sem</option>-->
                             </select>
                         </div>
                         <div class="input-group options">
@@ -241,7 +241,7 @@
                             <select class="form-control" id="groupby-list">
                                 <option selected="selected" value="token">token</option>
                                 <option value="pos">pos</option>
-                                <option value="sem">sem</option>
+                                <!--<option value="sem">sem</option>-->
                             </select>
                         </div>
                     </div>
@@ -319,7 +319,7 @@
                     </div>
                     <div class="modal-body">
                         <div>
-                            Hansard Live (1803-2019)
+                            <a href="https://doi.org/10.21250/db14">British Library Books</a>
                         </div>
                         <div>
                             <span id="tokenCountInfo">??</span> tokens, <span
@@ -333,9 +333,7 @@
                         <br/>
                         <div>
                             Data covered by <a
-                                href="https://www.parliament.uk/site-information/copyright-parliament/open-parliament-licence/"
-                                target="_blank">Open
-                            Parliament Licence v3.0.</a>
+                                href="https://creativecommons.org/publicdomain/mark/1.0/">CC Public Domain Mark 1.0</a> license.
                         </div>
                         <br/>
                         <div>
