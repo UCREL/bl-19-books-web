@@ -77,16 +77,28 @@ table.results td:last-child {
 }
 
 .meta {
-    text-align: left;
+    /*text-align: left;*/
     color: #b9bbbe;
     padding-right: 10px;
 }
 
-.pre {
+td.hit, th.hit{
+    text-align: center;
+    margin-right: 0;
+    padding-right: 0;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+td.pre, th.pre{
+    margin-right: 0;
+    padding-right: 0;
     text-align: right;
 }
 
-.post {
+td.post, th.post {
+    margin-left: 0;
+    padding-left: 0;
     text-align: left;
 }
 

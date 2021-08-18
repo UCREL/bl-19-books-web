@@ -282,14 +282,44 @@ function displayConcordances(data, updateViz) {
     loadingResults(data, infoText);
 
     var table = document.createElement("table");
-    table.className = "results";
+    table.className = "text-center table table-hover";
     results.appendChild(table);
+
+    let thead = document.createElement('thead');
+    table.appendChild(thead);
+    let theadTr = document.createElement('tr');
+    thead.appendChild(theadTr);
+
+    let indexTh = document.createElement('th');
+    indexTh.appendChild(document.createTextNode('#'));
+    theadTr.appendChild(indexTh);
+    let concTh = document.createElement('th');
+    concTh.colSpan = 3;
+    concTh.className = "text-center";
+    concTh.appendChild(document.createTextNode('Concordance'));
+    theadTr.appendChild(concTh);
+    //let hitTh = document.createElement('th');
+    //hitTh.className = "hit";
+    //theadTr.appendChild(hitTh);
+    //let postTh = document.createElement('th');
+    //postTh.className = "post";
+    //theadTr.appendChild(postTh);
+    let pageTh = document.createElement('th');
+    pageTh.appendChild(document.createTextNode('Page Number'))
+    theadTr.appendChild(pageTh);
+    let fileTh = document.createElement('th');
+    fileTh.appendChild(document.createTextNode('File Name'))
+    theadTr.appendChild(fileTh); 
+
+    var tbody = document.createElement("tbody");
+    table.appendChild(tbody);
+
     lineNum = 0;
     for (var i = 0; i < concs.length; i++) {
         var conc = concs[i];
         var hitToken = conc[context + 1];
         var tr = document.createElement("tr");
-        table.appendChild(tr);
+        tbody.appendChild(tr);
 
         var tdnumber = document.createElement("td");
         tdnumber.className = "meta";
@@ -353,6 +383,14 @@ function displayConcordances(data, updateViz) {
             var token = conc[j];
             tdpost.appendChild(getTokenNode(token));
             tokenNum += 1;
+        }
+
+        var tdpage = document.createElement("td");
+        tdpage.className = "meta";
+        tr.appendChild(tdpage);
+        if (hitToken != null && hitToken.page != null) {
+            var page = document.createTextNode(hitToken.page);
+            tdpage.appendChild(page);
         }
 
         var tdfile = document.createElement("td");
