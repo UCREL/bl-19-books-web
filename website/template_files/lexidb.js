@@ -100,16 +100,20 @@ function runQuery(page, updateViz, timeout=20) {
         timeout = 500;
     newQuery = (timeout == 20);
     if (updateViz) {
-        document.getElementById("timeline").style.display = "none";
+        //document.getElementById("timeline").style.display = "none";
         document.getElementById("wordcloud").style.display = "none";
         document.getElementById("viz").style.display = "none";
     }
     updateQuery(page);
     query.result.sort = getSortOptions();
-    query.result.async = true;
+    query.result.async = false;
     document.getElementById("viz").style.display = "none";
     //closeNav();
     lastJsonQuery = JSON.stringify(query);
+    /*
+    Repeated calls is required as it is ASYNC so that all of the 
+    data can be retrieved.
+    */
     $.ajax({
         type: "POST",
         url: "/" + corpus + "/query",
@@ -119,12 +123,15 @@ function runQuery(page, updateViz, timeout=20) {
         success: function (data) {
             lastData = data;
             displayResults(data, updateViz);
+            console.log(lastJsonQuery);
+            console.log(data);
+            console.log("success");
 
-            setTimeout(function(){
+            /*setTimeout(function(){
                 if(data.blockQueried != data.totalBlocks | (data.hasOwnProperty('concordances') && !data.sorted)) {
                     runQuery(page, updateViz, timeout*4);
                 }
-            }, timeout);
+            }, timeout);*/
         },
         failure: function (errMsg) {
             handleError(errMsg);
@@ -152,17 +159,18 @@ function updateQuery(page) {
     document.getElementById("queryString").value = queryString;
     paramvalue = $("#queryString").val();
     query.query.tokens = paramvalue;
-    speakervalue = $("#speaker").val();
-    datevalue = $("#date").val();
-    if (speakervalue && speakervalue !== "") {
+    //speakervalue = $("#speaker").val();
+    //datevalue = $("#date").val();
+    /*if (speakervalue && speakervalue !== "") {
         query.query.tokens = query.query.tokens.replace("}", ", \"speaker\":\"" + speakervalue + "\"}")
-    }
-    if (datevalue && datevalue !== "") {
+    }*/
+    /*if (datevalue && datevalue !== "") {
         query.query.tokens = query.query.tokens.replace("}", ", \"date\":\"" + datevalue + "\"}")
-    }
+    }*/
     query.result.page = page;
 
     if (document.getElementById("kwic-tab").classList.contains("active")) {
+        console.log("KWIC");
         query.result.type = "kwic";
         if (document.getElementById("context").value.length > 0) {
             context = parseInt(document.getElementById("context").value);
@@ -174,6 +182,7 @@ function updateQuery(page) {
         }
     }
     if (document.getElementById("ngram-tab").classList.contains("active")) {
+        console.log("NGRAM");
         query.result.type = "ngram";
         if (document.getElementById("n").value.length > 0) {
             var n = parseInt(document.getElementById("n").value);
@@ -189,6 +198,7 @@ function updateQuery(page) {
         }
     }
     if (document.getElementById("list-tab").classList.contains("active")) {
+        console.log("LIST");
         query.result.type = "list";
         if (document.getElementById("groupby-list").value.length > 0) {
             var groupby = document.getElementById("groupby-list").value;
@@ -197,6 +207,7 @@ function updateQuery(page) {
         }
     }
     if (document.getElementById("col-tab").classList.contains("active")) {
+        console.log("COL TAB");
         var coltype = document.getElementById("col-type").value;
         query.result.type = coltype;
         query.result.context = document.getElementById("col-context").value;
@@ -254,7 +265,7 @@ function loadingResults(data, text){
 
 function displayConcordances(data, updateViz) {
     if (updateViz && data.resultCount > 0 && data.blockQueried == data.totalBlocks) {
-        getTimeline(lastJsonQuery);
+        //getTimeline(lastJsonQuery);
     }
 
     concs = data.concordances;
@@ -288,7 +299,7 @@ function displayConcordances(data, updateViz) {
         tdnumber.appendChild(number);
 
 
-        var tdspeaker = document.createElement("td");
+        /*var tdspeaker = document.createElement("td");
         tdspeaker.className = "meta";
         tr.appendChild(tdspeaker);
         if (hitToken != null && hitToken.speaker != null) {
@@ -298,23 +309,23 @@ function displayConcordances(data, updateViz) {
             var speakerName = document.createTextNode(hitToken.speaker);
             link.appendChild(speakerName);
             tdspeaker.appendChild(link);
-        }
+        }*/
 
-        var tdhouse = document.createElement("td");
+        /*var tdhouse = document.createElement("td");
         tdhouse.className = "meta";
         tr.appendChild(tdhouse);
         if (hitToken != null && hitToken.house != null) {
             var house = document.createTextNode(hitToken.house);
             tdhouse.appendChild(house);
-        }
+        }*/
 
-        var tddate = document.createElement("td");
+        /*var tddate = document.createElement("td");
         tddate.className = "meta";
         tr.appendChild(tddate);
         if (hitToken != null && hitToken.date != null) {
             var date = document.createTextNode(hitToken.date);
             tddate.appendChild(date);
-        }
+        }*/
 
         var tdpre = document.createElement("td");
         tdpre.className = "pre";
@@ -767,8 +778,8 @@ defaults.set("n", 3);
 defaults.set("ngram-context", 2);
 defaults.set("col-context", 1);
 defaults.set("topXResults", 150);
-defaults.set("speaker", "");
-defaults.set("date", "");
+//defaults.set("speaker", "");
+//defaults.set("date", "");
 
 
 function resetDefaults() {
@@ -786,7 +797,7 @@ function clearSort(){
 }
 
 function apply() {
-    runQuery(0, true);
+    runQuery(0, false);
     closeNav();
 }
 
