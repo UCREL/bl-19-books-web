@@ -65,13 +65,13 @@ function jsonQueryToPrinatableString(queryString){
     return newString;
 }
 
-function hideViz(){
+/*function hideViz(){
     var divTohide = document.getElementById('viz-body');
     var link = document.getElementById('vizToggle');
     divTohide.style.maxHeight = null;
     link.firstChild.classList.remove('fa-minus');
     link.firstChild.classList.add('fa-plus');
-}
+}*/
 
 function updateCorpusInfo() {
     $.ajax({
@@ -99,15 +99,15 @@ function runQuery(page, updateViz, timeout=20) {
     if(timeout > 500)
         timeout = 500;
     newQuery = (timeout == 20);
-    if (updateViz) {
+    //if (updateViz) {
         //document.getElementById("timeline").style.display = "none";
-        document.getElementById("wordcloud").style.display = "none";
-        document.getElementById("viz").style.display = "none";
-    }
+    //    document.getElementById("wordcloud").style.display = "none";
+    //    document.getElementById("viz").style.display = "none";
+    //}
     updateQuery(page);
     query.result.sort = getSortOptions();
     query.result.async = false;
-    document.getElementById("viz").style.display = "none";
+    //document.getElementById("viz").style.display = "none";
     //closeNav();
     lastJsonQuery = JSON.stringify(query);
     /*
@@ -170,7 +170,6 @@ function updateQuery(page) {
     query.result.page = page;
 
     if (document.getElementById("kwic-tab").classList.contains("active")) {
-        console.log("KWIC");
         query.result.type = "kwic";
         if (document.getElementById("context").value.length > 0) {
             context = parseInt(document.getElementById("context").value);
@@ -182,7 +181,6 @@ function updateQuery(page) {
         }
     }
     if (document.getElementById("ngram-tab").classList.contains("active")) {
-        console.log("NGRAM");
         query.result.type = "ngram";
         if (document.getElementById("n").value.length > 0) {
             var n = parseInt(document.getElementById("n").value);
@@ -198,7 +196,6 @@ function updateQuery(page) {
         }
     }
     if (document.getElementById("list-tab").classList.contains("active")) {
-        console.log("LIST");
         query.result.type = "list";
         if (document.getElementById("groupby-list").value.length > 0) {
             var groupby = document.getElementById("groupby-list").value;
@@ -207,7 +204,6 @@ function updateQuery(page) {
         }
     }
     if (document.getElementById("col-tab").classList.contains("active")) {
-        console.log("COL TAB");
         var coltype = document.getElementById("col-type").value;
         query.result.type = coltype;
         query.result.context = document.getElementById("col-context").value;
@@ -451,7 +447,7 @@ function displayNgrams(data) {
     paging.innerHTML = "";
     paging.style.width = "";
 
-    document.getElementById("chart").innerHTML = "";
+    //document.getElementById("chart").innerHTML = "";
     var results = document.createDocumentFragment();
     var table = document.createElement("table");
     table.className = "results";
@@ -494,7 +490,7 @@ function displayNgrams(data) {
     }
     jumbotron.appendChild(results);
 
-    hideViz();
+    //hideViz();
 
 }
 
@@ -512,7 +508,7 @@ function displayCollocates(data, updateViz) {
     paging.innerHTML = "";
     paging.style.width = "";
 
-    document.getElementById("chart").innerHTML = "";
+    //document.getElementById("chart").innerHTML = "";
 
         var results = document.createDocumentFragment();
         var table = document.createElement("table");
@@ -559,12 +555,10 @@ function displayCollocates(data, updateViz) {
             row.appendChild(extra);
         }
 
-        //console.log("Displaying " + data.collocations.length + " collocations");
         var jumbotron = document.getElementById("jumbotron");
         while (jumbotron.firstChild) {
             jumbotron.removeChild(jumbotron.firstChild);
         }
-        //console.log(results);
         jumbotron.appendChild(results);
 }
 
@@ -584,7 +578,7 @@ function displayList(data) {
     paging.innerHTML = "";
     paging.style.width = "";
 
-    document.getElementById("chart").innerHTML = "";
+    //document.getElementById("chart").innerHTML = "";
     var results = document.createDocumentFragment();
     var table = document.createElement("table");
     table.className = "results";
