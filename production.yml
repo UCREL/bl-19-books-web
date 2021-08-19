@@ -5,10 +5,14 @@ services:
         volumes:
             - /mnt/luna/projects/lexi_1890/lexi-data/bl-books:/data/lexi-data/bl-books
             - /mnt/luna/projects/lexi_1890/app.properties:/lexidb/app.properties
+            - /mnt/luna/projects/lexi_1890/log4j.properties:/lexidb/log4j.properties
         networks:
             - backend
         user: $USER
         restart: unless-stopped
+        entrypoint: java
+        command: -Dlog4j.configuration=file:/lexidb/log4j.properties lexidb-2.0.jar /lexidb/app.properties
+
     web:
         image: nginx:1.20-alpine
         depends_on:
