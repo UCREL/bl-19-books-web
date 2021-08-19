@@ -106,7 +106,7 @@ function runQuery(page, updateViz, timeout=20) {
     //}
     updateQuery(page);
     query.result.sort = getSortOptions();
-    query.result.async = false;
+    query.result.async = true;
     //document.getElementById("viz").style.display = "none";
     //closeNav();
     lastJsonQuery = JSON.stringify(query);
@@ -127,11 +127,11 @@ function runQuery(page, updateViz, timeout=20) {
             console.log(data);
             console.log("success");
 
-            /*setTimeout(function(){
+            setTimeout(function(){
                 if(data.blockQueried != data.totalBlocks | (data.hasOwnProperty('concordances') && !data.sorted)) {
                     runQuery(page, updateViz, timeout*4);
                 }
-            }, timeout);*/
+            }, timeout);
         },
         failure: function (errMsg) {
             handleError(errMsg);
