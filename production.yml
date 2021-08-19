@@ -10,8 +10,9 @@ services:
             - backend
         user: $USER
         restart: unless-stopped
+        working_dir: /lexidb
         entrypoint: java
-        command: -Dlog4j.configuration=file:/lexidb/log4j.properties lexidb-2.0.jar /lexidb/app.properties
+        command: -Dlog4j.configuration=file:/lexidb/log4j.properties -jar lexidb-2.0.jar /lexidb/app.properties
 
     web:
         image: nginx:1.20-alpine
