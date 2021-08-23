@@ -1,0 +1,887 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+        <meta content="British Library Books - LexiDB" name="application-name">
+        <meta content="British Library Books - LexiDB - Query Syntax Guide" name="description">
+        <meta name="color-scheme" content="only light">
+        <link href="/logo.png" rel="icon" type="image/png">
+    
+        <title>Query Syntax Guide</title>
+    
+        <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    
+        <link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+              integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" rel="stylesheet">
+        <link href="./template_files/query-style-guide.css" rel="stylesheet" type="text/css">
+    
+        <style>
+            .code {
+                font-family: Courier;
+                font-size: 12pt;
+                height: 250px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid p-3">
+            <div class="offset-md-2 col-md-8">
+                <header>
+                    <h1 id="query-syntax-guide">Query Syntax Guide</h1>
+                    <div class="dropdown">
+                        
+                        <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-controls="dropdown-menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                            </svg>
+                        </a>
+                        <ul id="dropdown-menu" role="menu" aria-labelledby="dropdownMenuLink" class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" role="menuitem" href="#basics-and-qbe-expressions">
+                                    Basics and QBE expressions
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="menuitem" href="#sequences-and-token-stream-regular-expressions">
+                                    Sequences and token stream regular expressions
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="menuitem" href="#regular-expressions">
+                                    Regular expressions
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="menuitem" href="#advanced-usage">
+                                    Advanced usage
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="menuitem" href="#examples">
+                                    Examples
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="menuitem" href="#pos-tagset">
+                                    POS Tagset
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" role="menuitem" href="#acknowledgements">
+                                    Acknowledgements
+                                </a>
+                            </li>
+                            
+                            
+
+                            
+
+                        </ul>
+                    </div>
+                </header>
+                <hr/>
+
+                <p>
+                    You can query for both <mark>tokens</mark> and <mark>Part Of Speech (POS) tags</mark>, of which these are represented by the <mark>token</mark> and <mark>pos</mark> columns respectively. For a list of all POS tags and their description see the <a href="#pos-tagset">POS tagset section below</a>.
+                </p>
+                <p>
+                    We used the <a href="https://github.com/explosion/spacy-models/releases/tag/en_core_web_md-3.1.0">Spacy English (medium) model</a> to generate the tokens and POS tags that can be queried through the LexiDB database.  
+                </p>
+                
+                <section id="basics-and-qbe-expressions">
+                    <div class="anchor-heading">
+                        <a href="#basics-and-qbe-expressions">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-link anchor-svg" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                            </svg>
+                        </a>
+                        <h2>Basics and QBE expressions</h2>
+                    </div>
+
+                    <hr/>
+
+                    <p>
+                        The query syntax in LexiDB is based around <mark>QBE (Query by example)</mark>. An example of a simple <abbr title="Query By Example">QBE</abbr> object would be;
+                    </p>
+
+                    <div class="multi-line-code"><code>
+
+                        {"token": "test"}
+
+                    </code></div>
+
+                    <p>
+                        This would query for the string <mark>test</mark> in the <mark>token</mark> column.
+                    </p>
+
+                    <p>
+                        Regular expressions can be used instead of string values;
+                    </p>
+
+                    <div class="multi-line-code"><code>
+
+                        {"token": "test.*"}
+
+                    </code></div>
+
+                    <p>
+                        This query would return results for all tokens that match the regex <code>test.*</code> i.e. test, tested, testing, etc.
+                    </p>
+
+                    <p>
+                        Additional columns can be queried within a <abbr title="Query By Example">QBE</abbr> object, expressed as a comma-seperated list of key-value pairs. For example, Part of Speech can be included;
+                    </p>
+
+                    <div class="multi-line-code">
+                        <code>
+                            {"token": "test.*", "pos":"V.*"}
+                        </code>
+                    </div>
+                    
+                    <p>
+                        The above query would find all instances of tokens starting with <mark>test</mark> that are tagged with a <abbr title="Part Of Speech">POS</abbr> beginning <mark>V</mark> (a verb form). All columns can be queried using regular expressions.
+                    </p>
+
+                    <p>
+                        <strong>Note</strong> in a single <abbr title="Query By Example">QBE</abbr> object all key-value pairs specified will be marched against in the query. LexiDB's <abbr title="Query By Example">QBE</abbr> syntax is essentially <a href="https://www.json.org/json-en.html">JavaScript Object Notation (JSON)</a>.
+                    </p>
+                </section>
+
+                <section id="sequences-and-token-stream-regular-expressions">
+                    <div class="anchor-heading">
+                        <a href="#sequences-and-token-stream-regular-expressions">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-link anchor-svg" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                            </svg>
+                        </a>
+                        <h2>Sequences and token stream regular expressions</h2>
+                    </div>
+
+                    <hr/>
+
+                    <p>
+                        Sequences of tokens can be queried for by expressing a series of <abbr title="Query By Example">QBE</abbr> objects;
+                    </p>
+
+                    <div class="multi-line-code">
+                        <code>
+                            {"token": "test"}{"token": "for"}{"token": "a"}
+                        </code>
+                    </div>
+
+                    <p>
+                        This query would search for the sequence <mark>test for a</mark>.
+                    </p>
+
+                    <p>
+                        Within a series of <abbr title="Query By Example">QBE</abbr> objects regular expression special characters may be used;
+                    </p>
+
+                    <div class="multi-line-code">
+                        <code>
+                            {"token": "test"}{"token": "for"}?{"token": "a"}
+                        </code>
+                    </div>
+
+                    <p>
+                        Above the <code>?</code> after the second <abbr title="Query By Example">QBE</abbr> object specifies that this token is optional and so the query would return results <mark>test for a</mark> and <mark>test a</mark>.
+                    </p>
+                </section>    
+                
+                <section id="regular-expressions">
+                    <div class="anchor-heading">
+                        <a href="#regular-expressions">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-link anchor-svg" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                            </svg>
+                        </a>
+                        <h2>Regular expressions</h2>
+                    </div>
+
+                    <hr/>
+
+                    <p>
+                        LexiDB makes use of <a href="https://www.brics.dk/automaton/doc/dk/brics/automaton/package-summary.html">dk.brics</a> automata engine for regular expression matching both on string values within columns and token values on sequences. Any special regular expression characters not supported by this engine are not currently supported by LexiDB.
+                    </p>
+                </section>
+
+                <section id="advanced-usage">
+                    <div class="anchor-heading">
+                        <a href="#advanced-usage">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-link anchor-svg" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                            </svg>
+                        </a>
+                        <h2>Advanced usage</h2>
+                    </div>
+                    
+                    <hr/>
+
+                    <p>
+                        <abbr title="Query By Example">QBE</abbr> objects can be back-referenced within a query. For example, the following query searches for the term <mark>run</mark> followed by a <mark>verb</mark> or a <mark>verb</mark> followed by the term <mark>run</mark>;
+                    </p>
+
+                    <div class="multi-line-code">
+                        <code>
+                            {"token": "run"}{"pos": "V.*"}|ba
+                        </code>
+                    </div>
+                    
+                    <p>
+                        In this case the first <abbr title="Query By Example">QBE</abbr> object <code>{"token": "run"}</code> can be back-referenced using <code>a</code> and the second object <code>{"pos": "V.*"}</code> cab be back-referenced using <code>b</code>. The same query could be written more verbosely as;
+                    </p>
+
+                    <div class="multi-line-code">
+                        <code>
+                            {"token": "run"}{"pos": "V.*"}|{"pos": "V.*"}{"token": "run"}
+                        </code>
+                    </div>
+
+                    <p>
+                        <strong>Note</strong> for efficiency it is always recommended using back-references to prevent additional index lookups.
+                    </p>
+                </section>
+                
+                <section id="examples">
+                    <div class="anchor-heading">
+                        <a href="#examples">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-link anchor-svg" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                            </svg>
+                        </a>
+                        <h2>Examples</h2>
+                    </div>
+                    
+                    <hr/>
+
+                    <p>
+                        Search for the term <code>war</code> within 5 tokens of a word that has been tagged as an adjective <code>JJ.*</code>;
+                    </p>
+
+                    <div class="multi-line-code">
+                        <code>
+                            {"token": "war"}.{0,5}{"pos": "JJ.*"}|b.{0,5}a
+                        </code>
+                    </div>
+
+                    <p>
+                        Here as <code>.{0,5}</code> is out of the context of a <abbr title="Query By Example">QBE</abbr> object it means any token up to 5 times rather than any character.
+                    </p>
+                </section>
+
+                <section id="pos-tagset">
+                    <div class="anchor-heading">
+                        <a href="#pos-tagset">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-link anchor-svg" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                            </svg>
+                        </a>
+                        <h2>POS Tagset</h2>
+                    </div>
+                    
+                    <hr/>
+
+                    <p>
+                        The POS tagset comes from the <a href="https://catalog.ldc.upenn.edu/LDC2013T19">OntoNotes 5.0 corpus</a>, as this is what the Spacy English POS tagger was trained on that we used to tag the corpus with. Below is the full list of tags and their respective description.
+                    </p>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    #
+                                </th>
+                                <th scope="col">
+                                    POS Tag
+                                </th>
+                                <th scope="col">
+                                    Description
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">
+                                    0
+                                </th>
+                                <td>
+                                    $
+                                </td>
+                                <td>
+                                    symbol, currency
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    1
+                                </th>
+                                <td>
+                                    ''
+                                </td>
+                                <td>
+                                    closing quotation mark
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    2
+                                </th>
+                                <td>
+                                    ,
+                                </td>
+                                <td>
+                                    punctuation mark, comma
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    3
+                                </th>
+                                <td>
+                                    -LRB-
+                                </td>
+                                <td>
+                                    left round bracket
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    4
+                                </th>
+                                <td>
+                                    -RRB-
+                                </td>
+                                <td>
+                                    right round bracket
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    5
+                                </th>
+                                <td>
+                                    .
+                                </td>
+                                <td>
+                                    punctuation mark, sentence closer
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    6
+                                </th>
+                                <td>
+                                    :
+                                </td>
+                                <td>
+                                    punctuation mark, colon or ellipsis
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    7
+                                </th>
+                                <td>
+                                    ADD
+                                </td>
+                                <td>
+                                    email
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    8
+                                </th>
+                                <td>
+                                    AFX
+                                </td>
+                                <td>
+                                    affix
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    9
+                                </th>
+                                <td>
+                                    CC
+                                </td>
+                                <td>
+                                    conjunction, coordinating
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    10
+                                </th>
+                                <td>
+                                    CD
+                                </td>
+                                <td>
+                                    cardinal number
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    11
+                                </th>
+                                <td>
+                                    DT
+                                </td>
+                                <td>
+                                    determiner
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    12
+                                </th>
+                                <td>
+                                    EX
+                                </td>
+                                <td>
+                                    existential there
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    13
+                                </th>
+                                <td>
+                                    FW
+                                </td>
+                                <td>
+                                    foreign word
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    14
+                                </th>
+                                <td>
+                                    HYPH
+                                </td>
+                                <td>
+                                    punctuation mark, hyphen
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    15
+                                </th>
+                                <td>
+                                    IN
+                                </td>
+                                <td>
+                                    conjunction, subordinating or preposition
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    16
+                                </th>
+                                <td>
+                                    JJ
+                                </td>
+                                <td>
+                                    adjective (English), other noun-modifier (Chinese)
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    17
+                                </th>
+                                <td>
+                                    JJR
+                                </td>
+                                <td>
+                                    adjective, comparative
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    18
+                                </th>
+                                <td>
+                                    JJS
+                                </td>
+                                <td>
+                                    adjective, superlative
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    19
+                                </th>
+                                <td>
+                                    LS
+                                </td>
+                                <td>
+                                    list item marker
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    20
+                                </th>
+                                <td>
+                                    MD
+                                </td>
+                                <td>
+                                    verb, modal auxiliary
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    21
+                                </th>
+                                <td>
+                                    NFP
+                                </td>
+                                <td>
+                                    superfluous punctuation
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    22
+                                </th>
+                                <td>
+                                    NN
+                                </td>
+                                <td>
+                                    noun, singular or mass
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    23
+                                </th>
+                                <td>
+                                    NNP
+                                </td>
+                                <td>
+                                    noun, proper singular
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    24
+                                </th>
+                                <td>
+                                    NNPS
+                                </td>
+                                <td>
+                                    noun, proper plural
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    25
+                                </th>
+                                <td>
+                                    NNS
+                                </td>
+                                <td>
+                                    noun, plural
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    26
+                                </th>
+                                <td>
+                                    PDT
+                                </td>
+                                <td>
+                                    predeterminer
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    27
+                                </th>
+                                <td>
+                                    POS
+                                </td>
+                                <td>
+                                    possessive ending
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    28
+                                </th>
+                                <td>
+                                    PRP
+                                </td>
+                                <td>
+                                    pronoun, personal
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    29
+                                </th>
+                                <td>
+                                    PRP$
+                                </td>
+                                <td>
+                                    pronoun, possessive
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    30
+                                </th>
+                                <td>
+                                    RB
+                                </td>
+                                <td>
+                                    adverb
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    31
+                                </th>
+                                <td>
+                                    RBR
+                                </td>
+                                <td>
+                                    adverb, comparative
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    32
+                                </th>
+                                <td>
+                                    RBS
+                                </td>
+                                <td>
+                                    adverb, superlative
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    33
+                                </th>
+                                <td>
+                                    RP
+                                </td>
+                                <td>
+                                    adverb, particle
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    34
+                                </th>
+                                <td>
+                                    SYM
+                                </td>
+                                <td>
+                                    symbol
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    35
+                                </th>
+                                <td>
+                                    TO
+                                </td>
+                                <td>
+                                    infinitival "to"
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    36
+                                </th>
+                                <td>
+                                    UH
+                                </td>
+                                <td>
+                                    interjection
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    37
+                                </th>
+                                <td>
+                                    VB
+                                </td>
+                                <td>
+                                    verb, base form
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    38
+                                </th>
+                                <td>
+                                    VBD
+                                </td>
+                                <td>
+                                    verb, past tense
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    39
+                                </th>
+                                <td>
+                                    VBG
+                                </td>
+                                <td>
+                                    verb, gerund or present participle
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    40
+                                </th>
+                                <td>
+                                    VBN
+                                </td>
+                                <td>
+                                    verb, past participle
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    41
+                                </th>
+                                <td>
+                                    VBP
+                                </td>
+                                <td>
+                                    verb, non-3rd person singular present
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    42
+                                </th>
+                                <td>
+                                    VBZ
+                                </td>
+                                <td>
+                                    verb, 3rd person singular present
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    43
+                                </th>
+                                <td>
+                                    WDT
+                                </td>
+                                <td>
+                                    wh-determiner
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    44
+                                </th>
+                                <td>
+                                    WP
+                                </td>
+                                <td>
+                                    wh-pronoun, personal
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    45
+                                </th>
+                                <td>
+                                    WP$
+                                </td>
+                                <td>
+                                    wh-pronoun, possessive
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    46
+                                </th>
+                                <td>
+                                    WRB
+                                </td>
+                                <td>
+                                    wh-adverb
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    47
+                                </th>
+                                <td>
+                                    XX
+                                </td>
+                                <td>
+                                    unknown
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">
+                                    48
+                                </th>
+                                <td>
+                                    ``
+                                </td>
+                                <td>
+                                    opening quotation mark
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>                    
+
+                    <p>
+                        <strong>Note</strong> this tagset is very similar to the <a href="https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html">Penn Treebank 2 POS tagset</a>, for more details on the differences see the <a href="https://catalog.ldc.upenn.edu/docs/LDC2013T19/OntoNotes-Release-5.0.pdf">OntoNotes 5.0 release notes and most specifically section 3.2</a>.
+                    </p>
+                </section>
+                
+                <section id="acknowledgements">
+                    <div class="anchor-heading">
+                        <a href="#acknowledgements">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-link anchor-svg" viewBox="0 0 16 16">
+                                <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                                <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                            </svg>
+                        </a>
+                        <h2>Acknowledgements</h2>
+                    </div>
+                    
+                    <hr/>
+
+                    <p>
+                        This guide has been adapted from Matthew Coole's original query syntax guide: <a href="https://github.com/matthewcoole/lexidb/wiki/Query-Syntax">https://github.com/matthewcoole/lexidb/wiki/Query-Syntax</a>.
+                    </p>
+                </section>
+
+            </div>
+        </div>
+        <script crossorigin="anonymous" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script crossorigin="anonymous"
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+                src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script crossorigin="anonymous"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </body>
+</html>

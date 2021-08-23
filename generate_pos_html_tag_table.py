@@ -1,0 +1,36 @@
+import en_core_web_md
+import spacy
+
+nlp = en_core_web_md.load()
+
+tagger = nlp.get_pipe('tagger')
+tab = '    '
+print('<table class="table table-hover">')
+print(f'{tab}<thead>')
+print(f'{tab}{tab}<tr>')
+print(f'{tab}{tab}{tab}<th scope="col">')
+print(f'{tab}{tab}{tab}{tab}#')
+print(f'{tab}{tab}{tab}</th>')
+print(f'{tab}{tab}{tab}<th scope="col">')
+print(f'{tab}{tab}{tab}{tab}POS Tag')
+print(f'{tab}{tab}{tab}</th>')
+print(f'{tab}{tab}{tab}<th scope="col">')
+print(f'{tab}{tab}{tab}{tab}Description')
+print(f'{tab}{tab}{tab}</th>')
+print(f'{tab}{tab}</tr>')
+print(f'{tab}</thead>')
+print(f'{tab}<tbody>')
+for index, pos_label in enumerate(nlp.pipeline[1][1].labels):
+    print(f'{tab}{tab}<tr>')
+    print(f'{tab}{tab}{tab}<th scope="row">')
+    print(f'{tab}{tab}{tab}{tab}{index}')
+    print(f'{tab}{tab}{tab}</th>')
+    print(f'{tab}{tab}{tab}<td>')
+    print(f'{tab}{tab}{tab}{tab}{pos_label}')
+    print(f'{tab}{tab}{tab}</td>')
+    print(f'{tab}{tab}{tab}<td>')
+    print(f'{tab}{tab}{tab}{tab}{spacy.explain(pos_label)}')
+    print(f'{tab}{tab}{tab}</td>')
+    print(f'{tab}{tab}</tr>')
+print(f'{tab}</tbody>')
+print('</table>')

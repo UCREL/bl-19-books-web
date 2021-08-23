@@ -1,0 +1,51 @@
+.anchor-heading+hr {
+    padding: 0;
+    margin: 0;
+    padding-bottom: 1rem;
+}
+
+a {
+    color: #0053AB;
+}
+
+.anchor-svg {
+    transform: rotate(90deg);
+}
+
+.anchor-heading {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+}
+
+.anchor-heading a {
+    color: black;
+    cursor: pointer;
+}
+
+.multi-line-code {
+    padding: 1rem;
+    margin: 0;
+    margin-bottom: 1.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    background-color: #FAFAFA;
+    border-radius: 0.3rem;
+}
+
+code {
+    color: #91114C;
+}
+
+
+
+h2{
+    padding-top: 0.4rem;
+    padding-bottom: 0.2rem;
+    padding-left: 0.2rem;
+}
