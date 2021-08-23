@@ -95,6 +95,30 @@ function displayCorpusInfo(data) {
     document.getElementById("fileCountInfo").innerHTML = formatNumber(data.types.file);
 }
 
+function removeErrorTokensInConcordances(concordance, hitIndex) {
+    const pageNumber = concordance[hitIndex]['page'];
+    const reducedConcordance = [];
+    let numberTokenPreHit = hitIndex;
+    let numberTokenPostHit = hitIndex;
+    let tokenIndex = 0
+    for (let token of concordance) {
+        if (token['page'] != pageNumber){
+            if (tokenIndex < hitIndex){
+                numberTokenPreHit -= 1;
+            }
+            else if (tokenIndex > hitIndex){
+                numberTokenPostHit -= 1;
+            }
+            continue;
+        }
+        tokenIndex += 1;
+        reducedConcordance.push(token);
+    }
+    reducedConcordance.push({'numberTokenPreHit': numberTokenPreHit, 
+                             'numberTokenPostHit': numberTokenPostHit})
+    return reducedConcordance;
+}
+
 function runQuery(page, updateViz, timeout=20) {
     if(timeout > 500)
         timeout = 500;
@@ -106,7 +130,7 @@ function runQuery(page, updateViz, timeout=20) {
     //}
     updateQuery(page);
     query.result.sort = getSortOptions();
-    query.result.async = true;
+    query.result.async = false;
     //document.getElementById("viz").style.display = "none";
     //closeNav();
     lastJsonQuery = JSON.stringify(query);
@@ -121,17 +145,25 @@ function runQuery(page, updateViz, timeout=20) {
         processData: false,
         contentType: "application/json",
         success: function (data) {
+            if (data.hasOwnProperty('concordances')){
+                const reducedData = [];
+                const hitIndex = data['context'];
+                for (let concordance of data['concordances']){
+                    reducedData.push(removeErrorTokensInConcordances(concordance, hitIndex))
+                }
+                data['concordances'] = reducedData;
+            }
             lastData = data;
             displayResults(data, updateViz);
             console.log(lastJsonQuery);
             console.log(data);
             console.log("success");
 
-            setTimeout(function(){
+            /*setTimeout(function(){
                 if(data.blockQueried != data.totalBlocks | (data.hasOwnProperty('concordances') && !data.sorted)) {
                     runQuery(page, updateViz, timeout*4);
                 }
-            }, timeout);
+            }, timeout);*/
         },
         failure: function (errMsg) {
             handleError(errMsg);
@@ -313,7 +345,12 @@ function displayConcordances(data, updateViz) {
     lineNum = 0;
     for (var i = 0; i < concs.length; i++) {
         var conc = concs[i];
-        var hitToken = conc[context + 1];
+        const numberTokensInformation = conc[conc.length -1];
+        const numberTokenPostHit = numberTokensInformation['numberTokenPostHit'];
+        const numberTokenPreHit = numberTokensInformation['numberTokenPreHit'];
+        const numberHitTokens = (conc.length - 1) - (numberTokenPostHit + numberTokenPreHit)
+        const hitTokenLastIndex = numberHitTokens + numberTokenPreHit;
+        var hitToken = conc[numberTokenPreHit + 1];
         var tr = document.createElement("tr");
         tbody.appendChild(tr);
 
@@ -357,7 +394,7 @@ function displayConcordances(data, updateViz) {
         tdpre.className = "pre";
         tr.appendChild(tdpre);
         tokenNum = 0;
-        for (var j = 0; j < context; j++) {
+        for (var j = 0; j < numberTokenPreHit; j++) {
             var token = conc[j];
             tdpre.appendChild(getTokenNode(token));
             tokenNum += 1;
@@ -366,7 +403,7 @@ function displayConcordances(data, updateViz) {
         var tdhit = document.createElement("td");
         tdhit.className = "hit";
         tr.appendChild(tdhit);
-        for (var j = context; j < conc.length - context; j++) {
+        for (var j = numberTokenPreHit; j < hitTokenLastIndex; j++) {
             var token = conc[j];
             tdhit.appendChild(getTokenNode(token));
             tokenNum += 1;
@@ -375,7 +412,7 @@ function displayConcordances(data, updateViz) {
         var tdpost = document.createElement("td");
         tdpost.className = "post";
         tr.appendChild(tdpost);
-        for (var j = conc.length - context; j < conc.length; j++) {
+        for (var j = hitTokenLastIndex; j < conc.length - 1; j++) {
             var token = conc[j];
             tdpost.appendChild(getTokenNode(token));
             tokenNum += 1;
