@@ -96,13 +96,14 @@ function displayCorpusInfo(data) {
 }
 
 function removeErrorTokensInConcordances(concordance, hitIndex) {
-    const pageNumber = concordance[hitIndex]['page'];
+    const fileIdentifier = concordance[hitIndex]['$file'];
     const reducedConcordance = [];
     let numberTokenPreHit = hitIndex;
     let numberTokenPostHit = hitIndex;
-    let tokenIndex = 0
+    let tokenIndex = -1
     for (let token of concordance) {
-        if (token['page'] != pageNumber){
+        tokenIndex += 1;
+        if (token['$file'] != fileIdentifier){
             if (tokenIndex < hitIndex){
                 numberTokenPreHit -= 1;
             }
@@ -111,7 +112,7 @@ function removeErrorTokensInConcordances(concordance, hitIndex) {
             }
             continue;
         }
-        tokenIndex += 1;
+        
         reducedConcordance.push(token);
     }
     reducedConcordance.push({'numberTokenPreHit': numberTokenPreHit, 

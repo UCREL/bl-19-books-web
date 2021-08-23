@@ -88,8 +88,6 @@ docker run --user $(id -u):$(id -g) -v $(pwd)/lexi_1890:/data --entrypoint "java
 It took around 3 hours and 13 minutes to format 16GB of data into LexiDB, this was around 9211 volumes of data. In the LexiDB format the data is around 9GB compared to 16GB when in pure JSON format. On my own computer with an SSD it took 4 hours and 16 minutes, I think the task is CPU bound as it only used one processor.
 
 
-1. Need to fix the token at the end of the file problem. (in the morning do this with the small corpus by searching for the word "END", need to also do this with the first word in the corpus)
-
 
 ## Web interface:
 
