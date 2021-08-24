@@ -120,6 +120,29 @@ function removeErrorTokensInConcordances(concordance, hitIndex) {
     return reducedConcordance;
 }
 
+function loadingQuery(){
+    let header = document.getElementById("content-title");
+    header.innerHTML = "";
+    let spinnerDiv = document.createElement("div");
+    spinnerDiv.className = "spinner-border spinner-border-sm";
+    spinnerDiv.setAttribute("role", "status");
+    let spinnerSpan = document.createElement("span");
+    spinnerSpan.className = "sr-only";
+    let spinnerText = document.createTextNode("Loading...");
+    spinnerSpan.appendChild(spinnerText);
+    spinnerDiv.appendChild(spinnerSpan);
+    header.appendChild(spinnerDiv);
+
+    /*let percentSpan = document.createElement("span");
+    percentSpan.id = "percentSpan";
+    header.appendChild(percentSpan);
+
+    let infoSpan = document.createElement("span");
+    infoSpan.id = "infoSpan";
+    infoSpan.style = "color: LightGrey;";
+    header.appendChild(infoSpan);*/
+}
+
 function runQuery(page, updateViz, timeout=20) {
     if(timeout > 500)
         timeout = 500;
@@ -170,6 +193,7 @@ function runQuery(page, updateViz, timeout=20) {
             handleError(errMsg);
         }
     });
+    loadingQuery();
 }
 
 function updateQuery(page) {
@@ -534,9 +558,9 @@ function displayNgrams(data) {
 
 function displayCollocates(data, updateViz) {
 
-    if (updateViz && data.resultCount > 0 && data.blockQueried == data.totalBlocks) {
+    /*if (updateViz && data.resultCount > 0 && data.blockQueried == data.totalBlocks) {
         displayWordcloud(data);
-    }
+    }*/
 
     var infoText = "Collocates (" + formatNumber(data.collocations.length) + " items)";
 
@@ -671,6 +695,11 @@ function displayResults(data, updateViz) {
     } else if (data.collocations != null) {
         displayCollocates(data, updateViz);
     } else {
+        let header = document.getElementById("content-title");
+        header.innerHTML = "";
+        var paging = document.getElementById("paging");
+        paging.innerHTML = "";
+        paging.style.width = "";
         $(".jumbotron").first().html("No results to show");
         return;
     }
