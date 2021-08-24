@@ -189,7 +189,21 @@ function runQuery(page, updateViz, timeout=20) {
                 }
             }, timeout);*/
         },
+        error: function (jqXHR, textStatus, errorThrown) {
+            let header = document.getElementById("content-title");
+            header.innerHTML = "";
+            var paging = document.getElementById("paging");
+            paging.innerHTML = "";
+            paging.style.width = "";
+            $(".jumbotron").first().html("Timed out querying LexiDB. Please try this query again in a couple of minutes time. Warning Collocations can take a long time to process.");
+        },
         failure: function (errMsg) {
+            let header = document.getElementById("content-title");
+            header.innerHTML = "";
+            var paging = document.getElementById("paging");
+            paging.innerHTML = "";
+            paging.style.width = "";
+            $(".jumbotron").first().html("Timed out querying LexiDB. Please try this query again in a couple of minutes time.");
             handleError(errMsg);
         }
     });
