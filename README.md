@@ -96,6 +96,8 @@ It took around 3 hours and 13 minutes to format 16GB of data into LexiDB, this w
     * I'm not sure if it can tell the user that it cannot view the results until all of the results have come in for the sorted searches, if that is how sorted searches work.
     * The way I think async works at the moment is that each time you want an update you do another live search on LexiDB therefore I believe you keep using up threads doing the same thing. This I think is right, I think the threads do stop in the end, but this is not working on my local computer at the moment, on the server it is ok.
 2. Rather than running it purely as a frontend application, I think it would be better to run it as a pure web application with a full web framework like [Django](https://www.djangoproject.com/), [flask](https://flask.palletsprojects.com/en/2.0.x/), or [nextjs](https://nextjs.org/). The advantages of having such a framework, it will allow the web server (nginx) to be separate from all of the database within docker (plus for security). It will also allow us to use any type of database engine e.g. Mongo for the meta data. Finally I web framework will allow us to hide all of the database functionality of LexiDB from all users e.g. stop uses from calling LexiDB through the web server (nginx) without having to use the web interface.
+3. There might be an issue with the LexiDB API when LexiDB has an exception and therefore fails on the query, need to look into LexiDB more.
+4. If using `async=false` when calling the LexiDB API I think we need to call a function within the API to get an update on the progress of the query call.
 
 Benchmarking with 893 million words.
 
@@ -108,9 +110,15 @@ Server using 10 million word blocks:
 Server using 30 million word blocks:
 
 1. {"token": "the"} -- 4 seconds.
-2. {"pos":"NN"}{"pos":"JJ"} - over a minute around 20 seconds.
+2. {"pos":"NN"}{"pos":"JJ"} - around 20 seconds.
 
 Server tried using 100 million word blocks on inserting into lexiDB and it failed with a memory error.
+
+Server using 30 million word blocks and a SSD rather than luna.
+
+1. {"token": "the"} -- 4 seconds.
+2. {"pos":"NN"}{"pos":"JJ"} - 10 seconds.
+
 
 
 ## Website files
