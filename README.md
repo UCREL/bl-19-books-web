@@ -110,7 +110,7 @@ Server using 10 million word blocks:
 Server using 30 million word blocks:
 
 1. {"token": "the"} -- 4 seconds.
-2. {"pos":"NN"}{"pos":"JJ"} - around 20 seconds.
+2. {"pos":"NN"}{"pos":"JJ"} - around 13 seconds.
 
 Server tried using 100 million word blocks on inserting into lexiDB and it failed with a memory error.
 
