@@ -1,3 +1,6 @@
-test_files
+/test_files/*
 table.html
 .vscode
+!test_files/app.properties
+!test_files/log4j.properties
+!test_files/setup_files

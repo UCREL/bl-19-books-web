@@ -3,7 +3,7 @@ services:
     lexi:
         image: ghcr.io/ucrel/lexidb:0.1.1
         volumes:
-            - /mnt/luna/projects/lexi_1890/lexi-data/bl-books:/data/lexi-data/bl-books
+            - /mnt/luna/projects/lexi_1890/large-lexi-data/bl-books:/data/large-lexi-data/bl-books
             - /mnt/luna/projects/lexi_1890/app.properties:/lexidb/app.properties
             - /mnt/luna/projects/lexi_1890/log4j.properties:/lexidb/log4j.properties
         networks:
@@ -12,14 +12,14 @@ services:
         restart: unless-stopped
         working_dir: /lexidb
         entrypoint: java
-        command: -Dlog4j.configuration=file:/lexidb/log4j.properties -Xmx16g -jar lexidb-2.0.jar /lexidb/app.properties
+        command: -Dlog4j.configuration=file:/lexidb/log4j.properties -Xmx24g -jar lexidb-2.0.jar /lexidb/app.properties
 
     web:
         image: nginx:1.20-alpine
         depends_on:
             - lexi
         ports:
-            - 0.0.0.0:8080:80
+            - 0.0.0.0:80:80
         volumes:
             - ./website:/usr/share/nginx/html
             - ./default.conf:/etc/nginx/conf.d/default.conf

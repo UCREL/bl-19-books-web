@@ -1,0 +1,59 @@
+{
+    "name": "tokens",
+    "sets": [
+        {
+            "name": "tokens",
+            "columns" : [
+                {
+                    "name": "token"
+                }
+            ]
+        },
+        {
+            "name": "pos",
+            "columns": [
+                {
+                    "name": "pos"
+                }
+            ]
+        },
+        {
+            "name": "page",
+            "rle": true,
+            "columns" : [
+                {
+                    "name": "page"
+                }
+            ]
+        },
+        {
+            "name": "quality",
+            "rle": true,
+            "columns" : [
+                {
+                    "name": "quality",
+                    "xml": "quality/@value"
+                }
+            ]
+        },
+        {
+            "name": "token-count",
+            "rle": true,
+            "columns" : [
+                {
+                    "name": "identifier",
+                    "xml": "book/@identifier"
+                }
+            ]
+        },
+        {
+            "name": "file",
+            "rle": true,
+            "columns": [
+                {
+                    "name": "$file"
+                }
+            ]
+        }
+    ]
+}
