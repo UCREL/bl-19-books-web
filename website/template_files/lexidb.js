@@ -179,9 +179,6 @@ function runQuery(page, updateViz, timeout=20) {
             }
             lastData = data;
             displayResults(data, updateViz);
-            console.log(lastJsonQuery);
-            console.log(data);
-            console.log("success");
 
             /*setTimeout(function(){
                 if(data.blockQueried != data.totalBlocks | (data.hasOwnProperty('concordances') && !data.sorted)) {
