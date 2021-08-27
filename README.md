@@ -113,6 +113,51 @@ The trade off with having a larger `block.size` is that you need more RAM.
 
 It took around 3 hours and 13 minutes to format 16GB of data into LexiDB, this was around 9211 volumes of data. In the LexiDB format the data is around 7.8GB compared to 16GB when in pure JSON format.
 
+## Run the web application
+
+### Testing
+
+To run the web application using the test files that are within the `./test_files/setup_files` that after being formatted by LexiDB in the previous section should now be in LexiDB format in the following directory: `./test_files/lexi-data`, use the following docker command:
+
+``` bash
+USER=$(id -u) docker-compose up
+```
+
+The reason for the `USER=$(id -u)` is due to the folder `./test_files/lexi-data` normally only having permissions for the current user, therefore we run the LexiDB docker container as the current user.
+
+### Production
+
+#### Starting / Shutting down the current production machine
+
+This is currently running on the `ucrel-dighum` server which can only be accessed through the VPN, the current web application can be found running at the following URL: [http://ucrel-dighum.lancaster.ac.uk/](http://ucrel-dighum.lancaster.ac.uk/). This application has 24GB of RAM provisioned for it, the VM itself has access to 31GB of RAM.
+
+Currently on the production server it is running in a `tmux` session for the user `moorea`, therefore if you would like to stop the web application run the following:
+
+``` bash
+# Assuming you are the user moorea
+tmux attach
+# You should now see the docker container /web application running, to stop the docker container
+ctrl + C
+# This should now start to stop the docker container
+docker-compose down # This command stop the docker container
+# NOTE $(id -u) needs to evaluate to the user ID of moorea
+USER=$(id -u) docker-compose -f production.yml up # This will start the docker container / web application up again
+```
+
+#### Log files
+
+You can view the log files anytime including when the application is running.
+
+To view the log files of the web application:
+``` bash
+docker logs bl-19-books-web_web_1
+```
+
+To view the log files of the LexiDB database:
+```bash
+docker logs bl-19-books-web_lexi_1
+```
+
 ## Web interface:
 
 1. The async function is really good, and is the way forward with respect to giving live data to the user. 
@@ -122,7 +167,7 @@ It took around 3 hours and 13 minutes to format 16GB of data into LexiDB, this w
 2. Rather than running it purely as a frontend application, I think it would be better to run it as a pure web application with a full web framework like [Django](https://www.djangoproject.com/), [flask](https://flask.palletsprojects.com/en/2.0.x/), or [nextjs](https://nextjs.org/). The advantages of having such a framework, it will allow the web server (nginx) to be separate from all of the database within docker (plus for security). It will also allow us to use any type of database engine e.g. Mongo for the meta data. Finally I web framework will allow us to hide all of the database functionality of LexiDB from all users e.g. stop uses from calling LexiDB through the web server (nginx) without having to use the web interface.
 3. There might be an issue with the LexiDB API when LexiDB has an exception and therefore fails on the query, need to look into LexiDB more.
 4. If using `async=false` when calling the LexiDB API I think we need to call a function within the API to get an update on the progress of the query call.
-5. At the moment it would appear read permissions is not enough for LexiDB with regards to database files. On the SSL front for `default.conf` have a look at this for the proxy server: https://docs.nginx.com/nginx/admin-guide/security-controls/securing-tcp-traffic-upstream/
+5. At the moment it would appear read permissions is not enough for LexiDB with regards to database files. On the SSL front for `default.conf` have a look at this for the proxy server: https://docs.nginx.com/nginx/admin-guide/security-controls/securing-tcp-traffic-upstream/ . For linking nginx with LetsEncrypt SSL certificate this guide seems to be the answer on how to do it with renewal: https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
 6. LexiDB performs better with more RAM, the disk type does not seem to affect the performance that much from my own experience.
 
 Benchmarking with 893 million words.
@@ -146,8 +191,20 @@ Server using 30 million word blocks and a SSD rather than luna.
 2. {"pos":"NN"}{"pos":"JJ"} - 10 seconds.
 
 
+Collocations:
+1. Massachusetts - 206545ms
+2. Bay - 776958ms
+3. Morecambe - 27391ms
 
 ## Website files
+
+**Note** None of the commands below need re-running, it is only here to show how the POS tag and description table that is within the [./website/query-syntax-guide.html](./website/query-syntax-guide.html) file was generated.
+
+**Note** Python requirements, to run the commands below you will need Python >= 3.6 and install the following pip packages:
+
+``` bash
+pip install -r requirements.txt
+```
 
 To generate the POS tag and description table that is within the [./website/query-syntax-guide.html](./website/query-syntax-guide.html) file, run the following:
 

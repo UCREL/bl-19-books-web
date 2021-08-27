@@ -5,9 +5,13 @@ services:
         volumes:
             - ./test_files/lexi-data/bl-books:/data/lexi-data/bl-books
             - ./test_files/app.properties:/lexidb/app.properties
+            - ./test_files/log4j.properties:/lexidb/log4j.properties
         networks:
             - backend
         restart: unless-stopped
+        user: $USER
+        entrypoint: java
+        command: -Dlog4j.configuration=file:/lexidb/log4j.properties -jar lexidb-2.0.jar /lexidb/app.properties
     web:
         image: nginx:1.20-alpine
         depends_on:
