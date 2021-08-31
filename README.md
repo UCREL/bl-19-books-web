@@ -2,6 +2,12 @@
 
 Web front end code for the British Library books project.
 
+## Installation scripts
+
+In all cases we assume your operating system is Ubuntu.
+
+As the production server requires docker, to install docker run the [installation script.](https://github.com/UCREL/installation-scripts/blob/main/install_docker.sh)
+
 
 ## LexiDB Formatting and Schema
 
