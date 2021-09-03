@@ -96,6 +96,8 @@ This command will run as the current user `--user $(id -u):$(id -g)`, it will us
 
 #### Production
 
+**NOTE** `pwd` we assume is at the following path: `/mnt/luna/projects`
+
 Command used to add data to the LexiDB database on the server:
 
 ``` bash
